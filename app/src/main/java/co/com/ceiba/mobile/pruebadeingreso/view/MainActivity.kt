@@ -33,22 +33,12 @@ class MainActivity : AppCompatActivity(), UserAdapter.OnUserClickListener {
 
         // obteniendo lista de usuarios
         getAllUsers()
-
-
-        /*
-        val intent = Intent(this, PostActivity::class.java).apply {
-            putExtra(EXTRA_MESSAGE, "Hola")
-        }
-        startActivity(intent)
-        */
-
     }
 
     // inicializar elmentos
     private fun  initElements(){
-        recyclerView = findViewById(R.id.recyclerViewSearchResults)
         editText = findViewById(R.id.editTextSearch)
-
+        recyclerView = findViewById(R.id.recyclerViewSearchResults)
         recyclerView.layoutManager = LinearLayoutManager(this)
     }
 
@@ -58,8 +48,6 @@ class MainActivity : AppCompatActivity(), UserAdapter.OnUserClickListener {
         dialog.show()
 
         // Validar si existen los usuarios en la base de datos, sino, hacer la peticion y registrarlos
-        // si existen cargarlos en la vista
-
         val usersDB = UserController().getInstance(this)?.getAllUsers()
         if(usersDB?.size == 0 ){ // Noe existe informacion
             // No existe informacion
@@ -71,6 +59,9 @@ class MainActivity : AppCompatActivity(), UserAdapter.OnUserClickListener {
                         val gson = Gson()
                         val users = gson.fromJson(response, Array<User>::class.java)
                         var registered = true
+
+
+                        // Validar el registro de usuario ya que no funciona
 
                         for(user in users){
                             val usr = User(user.id, user.name, user.email, user.phone, user.website)
@@ -101,18 +92,10 @@ class MainActivity : AppCompatActivity(), UserAdapter.OnUserClickListener {
                 dialog.dismiss()
             }
         } else {
-            // cargando el recyclerview
+            // cargando el recyclerview *************+++
             // recyclerView.adapter = usersDB?.let { UserAdapter(this, it.toList()) }
             dialog.dismiss()
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
-    }
-
-    override fun onResume() {
-        super.onResume()
     }
 
     override fun onButtonClick(id: Int) {

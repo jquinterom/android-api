@@ -20,13 +20,18 @@ class PostActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_post)
 
-        getPostByUserId()
+        val userId = intent.getIntExtra("USER_ID", -1)
+        if (userId == -1){
+            // no ha llegado un id correcto
+            Utilities().longToast(this, getString(R.string.generic_error))?.show()
+        } else {
+            getPostByUserId(userId)
+        }
 
-        Utilities().longToast(this, intent.getIntExtra("USER_ID", 0).toString())?.show()
     }
 
     // obtener listado de post del usuario
-    private fun getPostByUserId(){
+    private fun getPostByUserId(userId: Int){
         val dialog = Utilities().progressDialog(this)
         dialog.show()
 

@@ -132,6 +132,8 @@ class dbManager{
         } catch (e: Exception) {
             e.printStackTrace()
         }
+
+        /// responder con los usuarios encontrados *********************++
         return response?.toTypedArray() ?: emptyArray()
     }
 
