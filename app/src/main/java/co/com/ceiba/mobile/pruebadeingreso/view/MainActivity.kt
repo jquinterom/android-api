@@ -31,7 +31,9 @@ class MainActivity : AppCompatActivity() {
                 Request.Method.GET, url,
                 { response ->
                     val gson = Gson()
-                    gson.fromJson(response, Array<User.UserInfo>::class.java)
+                    val users = gson.fromJson(response, Array<User.UserInfo>::class.java)
+
+                    // agregar usuarios a adaptador de lista
                 },
                 { error ->
                     Log.e("error", error.toString())
