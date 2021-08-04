@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Pruebadeingreso">
         <activity
-            android:name=".PostActivity"
+            android:name=".view.PostActivity"
             android:exported="true" />
         <activity
             android:name=".view.MainActivity"
