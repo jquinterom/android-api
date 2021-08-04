@@ -10,6 +10,7 @@ import co.com.ceiba.mobile.pruebadeingreso.R
 import co.com.ceiba.mobile.pruebadeingreso.helpers.MySingleton
 import co.com.ceiba.mobile.pruebadeingreso.models.User
 import co.com.ceiba.mobile.pruebadeingreso.rest.Endpoints
+import co.com.ceiba.mobile.pruebadeingreso.utilities.Utilities
 import com.android.volley.Request
 import com.android.volley.toolbox.StringRequest
 import com.google.gson.Gson
@@ -29,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         initElements()
 
         // obteniendo lista de usuarios
-        getAllUsers(this)
+        getAllUsers()
     }
 
     // inicializar elmentos
@@ -40,7 +41,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     // obtener lista de usuarios
-    private fun getAllUsers(context: Context) {
+    private fun getAllUsers() {
+        val dialog = Utilities().progressDialog(this)
+        dialog.show()
+
+        // Validar si existen los usuarios en la base de datos, sino, hacer la peticion y registrarlos
+        // si existen cargarlos en la vista
+
         try {
             val url = Endpoints().URL_BASE + Endpoints().GET_USERS
             val stringRequest = StringRequest(
@@ -50,13 +57,16 @@ class MainActivity : AppCompatActivity() {
                     val users = gson.fromJson(response, Array<User.UserInfo>::class.java)
 
                     // agregar usuarios a adaptador de lista
+                    dialog.dismiss()
                 },
                 { error ->
                     Log.e("error", error.toString())
+                    dialog.dismiss()
                 })
-            MySingleton.getInstance(context).addToRequestQueue(stringRequest)
+            MySingleton.getInstance(this).addToRequestQueue(stringRequest)
         } catch (e : Exception){
             e.printStackTrace()
+            dialog.dismiss()
         }
     }
 
