@@ -9,7 +9,7 @@ import android.widget.EditText
 import co.com.ceiba.mobile.pruebadeingreso.R
 import co.com.ceiba.mobile.pruebadeingreso.controllers.UserController
 import co.com.ceiba.mobile.pruebadeingreso.helpers.MySingleton
-import co.com.ceiba.mobile.pruebadeingreso.helpers.RecyclerAdapter
+import co.com.ceiba.mobile.pruebadeingreso.helpers.adapters.UserAdapter
 import co.com.ceiba.mobile.pruebadeingreso.models.User
 import co.com.ceiba.mobile.pruebadeingreso.rest.Endpoints
 import co.com.ceiba.mobile.pruebadeingreso.utilities.Utilities
@@ -64,7 +64,7 @@ class MainActivity : AppCompatActivity() {
         // si existen cargarlos en la vista
 
         val usersDB = UserController().getInstance(this)?.getAllUsers()
-        if(usersDB?.size == 0 ){
+        if(usersDB?.size == 0 ){ // Noe existe informacion
             // No existe informacion
             try {
                 val url = Endpoints().URL_BASE + Endpoints().GET_USERS
@@ -84,7 +84,7 @@ class MainActivity : AppCompatActivity() {
                         }
 
                         // cargando el recyclerview
-                        recyclerView.adapter = RecyclerAdapter(this, users.toList())
+                        recyclerView.adapter = UserAdapter(this, users.toList())
 
                         // Validar si ha ocurrido un error
                         if(!registered){
@@ -104,10 +104,9 @@ class MainActivity : AppCompatActivity() {
                 dialog.dismiss()
             }
         } else {
+            // cargando el recyclerview
+            recyclerView.adapter = usersDB?.let { UserAdapter(this, it.toList()) }
             dialog.dismiss()
-            Log.d("aqui", "aquiii")
-
-            // Cargar en la vista
         }
     }
 

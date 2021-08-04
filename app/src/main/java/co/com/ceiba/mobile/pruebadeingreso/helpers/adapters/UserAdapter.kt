@@ -12,7 +12,7 @@ import co.com.ceiba.mobile.pruebadeingreso.models.Post
 import co.com.ceiba.mobile.pruebadeingreso.models.User
 import java.lang.IllegalArgumentException
 
-class RecyclerAdapter(val context: Context, val listUsers : List<User>, private val itemClickListener: OnUserClickListener)
+class UserAdapter(val context: Context, val listUsers : List<User>, private val itemClickListener: OnUserClickListener)
     : RecyclerView.Adapter<BaseViewHolder<*>>() {
 
     interface OnUserClickListener{
