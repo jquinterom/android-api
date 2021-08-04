@@ -1,7 +1,7 @@
 package co.com.ceiba.mobile.pruebadeingreso.utilities
 
 import android.content.Context
-import android.support.v7.app.AlertDialog
+import androidx.appcompat.app.AlertDialog
 import android.widget.Toast
 import co.com.ceiba.mobile.pruebadeingreso.R
 

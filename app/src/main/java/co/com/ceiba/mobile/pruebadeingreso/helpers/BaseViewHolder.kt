@@ -1,6 +1,6 @@
 package co.com.ceiba.mobile.pruebadeingreso.helpers
 
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 
 abstract class BaseViewHolder<T>(itemView : View) : RecyclerView.ViewHolder(itemView) {
