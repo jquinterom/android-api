@@ -1,6 +1,7 @@
 package co.com.ceiba.mobile.pruebadeingreso.view
 
 import android.content.Context
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.RecyclerView
@@ -23,6 +24,9 @@ class MainActivity : AppCompatActivity() {
     lateinit var editText: EditText
     // endregion
 
+    val EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE"
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -30,14 +34,21 @@ class MainActivity : AppCompatActivity() {
         initElements()
 
         // obteniendo lista de usuarios
-        getAllUsers()
+        //getAllUsers()
+
+
+        val intent = Intent(this, PostActivity::class.java).apply {
+            putExtra(EXTRA_MESSAGE, "Hola")
+        }
+        startActivity(intent)
+
     }
 
     // inicializar elmentos
     private fun  initElements(){
         recyclerView = findViewById(R.id.recyclerViewSearchResults)
-
         editText = findViewById(R.id.editTextSearch)
+
     }
 
     // obtener lista de usuarios
