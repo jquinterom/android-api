@@ -1,12 +1,44 @@
 package co.com.ceiba.mobile.pruebadeingreso.view
 
+import android.content.Context
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import co.com.ceiba.mobile.pruebadeingreso.R
+import co.com.ceiba.mobile.pruebadeingreso.controllers.UserController
+import co.com.ceiba.mobile.pruebadeingreso.helpers.MySingleton
+import co.com.ceiba.mobile.pruebadeingreso.models.User
+import co.com.ceiba.mobile.pruebadeingreso.rest.Endpoints
+import com.android.volley.Request
+import com.android.volley.toolbox.StringRequest
+import com.google.gson.Gson
+import java.lang.Exception
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        // obteniendo lista de usuarios
+        getAllUsers(this)
+    }
+
+    // obtener lista de usuarios
+    private fun getAllUsers(context: Context) {
+        try {
+            val url = Endpoints.URL_BASE + Endpoints.GET_USERS
+            val stringRequest = StringRequest(
+                Request.Method.GET, url,
+                { response ->
+                    val gson = Gson()
+                    gson.fromJson(response, Array<User.UserInfo>::class.java)
+                },
+                { error ->
+                    Log.e("error", error.toString())
+                })
+            MySingleton.getInstance(context).addToRequestQueue(stringRequest)
+        } catch (e : Exception){
+            e.printStackTrace()
+        }
     }
 }
