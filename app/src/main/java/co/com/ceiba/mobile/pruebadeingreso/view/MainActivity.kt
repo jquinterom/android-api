@@ -1,5 +1,6 @@
 package co.com.ceiba.mobile.pruebadeingreso.view
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,16 +19,12 @@ import com.android.volley.toolbox.StringRequest
 import com.google.gson.Gson
 import java.lang.Exception
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), UserAdapter.OnUserClickListener {
 
     // region importaciones
     lateinit var recyclerView: RecyclerView
     lateinit var editText: EditText
     // endregion
-
-    val EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE"
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -84,7 +81,7 @@ class MainActivity : AppCompatActivity() {
                         }
 
                         // cargando el recyclerview
-                        recyclerView.adapter = UserAdapter(this, users.toList())
+                        recyclerView.adapter = UserAdapter(this, users.toList(), this)
 
                         // Validar si ha ocurrido un error
                         if(!registered){
@@ -105,7 +102,7 @@ class MainActivity : AppCompatActivity() {
             }
         } else {
             // cargando el recyclerview
-            recyclerView.adapter = usersDB?.let { UserAdapter(this, it.toList()) }
+            // recyclerView.adapter = usersDB?.let { UserAdapter(this, it.toList()) }
             dialog.dismiss()
         }
     }
@@ -116,6 +113,13 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+    }
+
+    override fun onButtonClick(id: Int) {
+        val intent = Intent(this, PostActivity::class.java).apply {
+            putExtra("USER_ID", id)
+        }
+        startActivity(intent)
     }
 
 }

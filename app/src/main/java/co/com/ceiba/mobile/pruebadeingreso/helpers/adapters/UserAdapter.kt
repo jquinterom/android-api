@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import co.com.ceiba.mobile.pruebadeingreso.R
 import co.com.ceiba.mobile.pruebadeingreso.helpers.BaseViewHolder
@@ -16,7 +17,7 @@ class UserAdapter(val context: Context, val listUsers : List<User>, private val 
     : RecyclerView.Adapter<BaseViewHolder<*>>() {
 
     interface OnUserClickListener{
-        fun onButtonClick()
+        fun onButtonClick(id: Int)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<*> {
@@ -36,10 +37,10 @@ class UserAdapter(val context: Context, val listUsers : List<User>, private val 
         override fun bind(item: User, position: Int) {
             val itemName : TextView = itemView.findViewById(R.id.name)
             val itemPhone : TextView = itemView.findViewById(R.id.phone)
+            val itemButton : Button = itemView.findViewById(R.id.btn_view_post)
             itemName.text = item.name
             itemPhone.text = item.phone
-
-            //itemBtn.setOnClickListener()
+            itemButton.setOnClickListener { itemClickListener.onButtonClick(item.id) }
         }
     }
 

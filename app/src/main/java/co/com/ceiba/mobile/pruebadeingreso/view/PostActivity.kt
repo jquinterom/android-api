@@ -21,6 +21,8 @@ class PostActivity : AppCompatActivity() {
         setContentView(R.layout.activity_post)
 
         getPostByUserId()
+
+        Utilities().longToast(this, intent.getIntExtra("USER_ID", 0).toString())?.show()
     }
 
     // obtener listado de post del usuario
