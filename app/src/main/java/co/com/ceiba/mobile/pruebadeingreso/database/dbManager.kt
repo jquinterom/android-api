@@ -65,7 +65,7 @@ class dbManager{
     // region consultas
 
     // Proceso para registrar usuario en la base de datos
-    open fun registerUser(user: User.UserInfo): Boolean {
+    open fun registerUser(user: User): Boolean {
         var response = true
         try {
             // crear a nuevo mapa de valores con llaves y valores
@@ -86,7 +86,7 @@ class dbManager{
 
 
     // Proceso para registrar post en la base de datos
-    open fun registerPost(post: Post.PostInfo): Boolean {
+    open fun registerPost(post: Post): Boolean {
         var response = true
         try {
             // crear a nuevo mapa de valores con llaves y valores
@@ -105,11 +105,11 @@ class dbManager{
     }
 
     // Recuperar los usuarios
-    fun getUsers(): Array<User.UserInfo> {
+    fun getUsers(): Array<User> {
         // colmuns
         val projection = arrayOf(TABLES.USERS.COLUMN_NAME_ID, TABLES.USERS.COLUMN_NAME_NAME,
             TABLES.USERS.COLUMN_NAME_EMAIL, TABLES.USERS.COLUMN_NAME_PHONE, TABLES.USERS.COLUMN_NAME_WEBSITE)
-        var response : MutableList<User.UserInfo>? = null
+        var response : MutableList<User>? = null
         try {
             val cursor = db?.query(
                 TABLES.USERS.TABLE_NAME,   // Tabla a consultar
@@ -138,12 +138,12 @@ class dbManager{
 
 
     // Recuperar los posts or usuario
-    fun getPosts(userId: Int): Array<Post.PostInfo> {
+    fun getPosts(userId: Int): Array<Post> {
         // colmuns
         val projection = arrayOf(TABLES.POSTS.COLUMN_NAME_ID, TABLES.POSTS.COLUMN_NAME_USER_ID,
             TABLES.POSTS.COLUMN_NAME_TITLE, TABLES.POSTS.COLUMN_NAME_BODY)
         val selection = "${TABLES.POSTS.COLUMN_NAME_USER_ID} = ?"
-        var response : MutableList<Post.PostInfo>? = null
+        var response : MutableList<Post>? = null
 
         try {
             val cursor = db?.query(

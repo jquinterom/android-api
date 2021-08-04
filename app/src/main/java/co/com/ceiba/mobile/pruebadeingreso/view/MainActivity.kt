@@ -2,6 +2,7 @@ package co.com.ceiba.mobile.pruebadeingreso.view
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.widget.EditText
@@ -50,6 +51,8 @@ class MainActivity : AppCompatActivity() {
         recyclerView = findViewById(R.id.recyclerViewSearchResults)
         editText = findViewById(R.id.editTextSearch)
 
+        recyclerView.layoutManager = LinearLayoutManager(this)
+
     }
 
     // obtener lista de usuarios
@@ -69,11 +72,11 @@ class MainActivity : AppCompatActivity() {
                     Request.Method.GET, url,
                     { response ->
                         val gson = Gson()
-                        val users = gson.fromJson(response, Array<User.UserInfo>::class.java)
+                        val users = gson.fromJson(response, Array<User>::class.java)
                         var registered = true
 
                         for(user in users){
-                            val usr = User.UserInfo(user.id, user.name, user.email, user.phone, user.website)
+                            val usr = User(user.id, user.name, user.email, user.phone, user.website)
                             // registrando usuario
                             if(registered) {
                                 registered = UserController().getInstance(this)!!.registerUser(usr)

@@ -37,7 +37,7 @@ class PostActivity : AppCompatActivity() {
                     Request.Method.GET, url,
             { response ->
                 val gson = Gson()
-                val posts = gson.fromJson(response, Array<User.UserInfo>::class.java)
+                val posts = gson.fromJson(response, Array<User>::class.java)
 
                 Log.d("posts", posts.size.toString())
                 // agregar usuarios a adaptador de lista
