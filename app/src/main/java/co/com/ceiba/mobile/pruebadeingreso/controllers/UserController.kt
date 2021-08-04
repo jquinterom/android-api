@@ -30,4 +30,9 @@ class UserController {
         return manager!!.registerUser(user!!)
     }
 
+    // obtener usuarios
+    fun getAllUsers() : Array<User.UserInfo> {
+        return manager!!.getUsers()
+    }
+
 }

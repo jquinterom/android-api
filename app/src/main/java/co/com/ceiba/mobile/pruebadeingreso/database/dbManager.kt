@@ -132,7 +132,7 @@ class dbManager{
         } catch (e: Exception) {
             e.printStackTrace()
         }
-        return response!!.toTypedArray()
+        return response?.toTypedArray() ?: emptyArray()
     }
 
 
