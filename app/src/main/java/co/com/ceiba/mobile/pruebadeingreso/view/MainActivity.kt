@@ -9,6 +9,7 @@ import android.widget.EditText
 import co.com.ceiba.mobile.pruebadeingreso.R
 import co.com.ceiba.mobile.pruebadeingreso.controllers.UserController
 import co.com.ceiba.mobile.pruebadeingreso.helpers.MySingleton
+import co.com.ceiba.mobile.pruebadeingreso.helpers.RecyclerAdapter
 import co.com.ceiba.mobile.pruebadeingreso.models.User
 import co.com.ceiba.mobile.pruebadeingreso.rest.Endpoints
 import co.com.ceiba.mobile.pruebadeingreso.utilities.Utilities
@@ -52,7 +53,6 @@ class MainActivity : AppCompatActivity() {
         editText = findViewById(R.id.editTextSearch)
 
         recyclerView.layoutManager = LinearLayoutManager(this)
-
     }
 
     // obtener lista de usuarios
@@ -63,8 +63,8 @@ class MainActivity : AppCompatActivity() {
         // Validar si existen los usuarios en la base de datos, sino, hacer la peticion y registrarlos
         // si existen cargarlos en la vista
 
-        val usersDB = UserController().getInstance(this)?.getAllUsers();
-        if(usersDB === null){
+        val usersDB = UserController().getInstance(this)?.getAllUsers()
+        if(usersDB?.size == 0 ){
             // No existe informacion
             try {
                 val url = Endpoints().URL_BASE + Endpoints().GET_USERS
@@ -82,6 +82,9 @@ class MainActivity : AppCompatActivity() {
                                 registered = UserController().getInstance(this)!!.registerUser(usr)
                             }
                         }
+
+                        // cargando el recyclerview
+                        recyclerView.adapter = RecyclerAdapter(this, users.toList())
 
                         // Validar si ha ocurrido un error
                         if(!registered){
@@ -102,6 +105,7 @@ class MainActivity : AppCompatActivity() {
             }
         } else {
             dialog.dismiss()
+            Log.d("aqui", "aquiii")
 
             // Cargar en la vista
         }

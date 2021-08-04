@@ -10,7 +10,6 @@ import co.com.ceiba.mobile.pruebadeingreso.R
 import co.com.ceiba.mobile.pruebadeingreso.models.User
 import java.lang.IllegalArgumentException
 
-
 class RecyclerAdapter(val context: Context, val listUsers : List<User>) : RecyclerView.Adapter<BaseViewHolder<*>>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<*> {
         return UsersViewHolder(LayoutInflater.from(context).inflate(R.layout.user_list_item, parent, false))
@@ -28,7 +27,9 @@ class RecyclerAdapter(val context: Context, val listUsers : List<User>) : Recycl
     inner class UsersViewHolder(itemView: View) : BaseViewHolder<User>(itemView){
         override fun bind(item: User, position: Int) {
             val itemName : TextView = itemView.findViewById(R.id.name)
+            val itemPhone : TextView = itemView.findViewById(R.id.phone)
             itemName.text = item.name
+            itemPhone.text = item.phone
         }
     }
 }
