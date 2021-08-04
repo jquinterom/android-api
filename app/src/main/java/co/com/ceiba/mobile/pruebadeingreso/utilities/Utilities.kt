@@ -2,6 +2,7 @@ package co.com.ceiba.mobile.pruebadeingreso.utilities
 
 import android.content.Context
 import android.support.v7.app.AlertDialog
+import android.widget.Toast
 import co.com.ceiba.mobile.pruebadeingreso.R
 
 
@@ -14,5 +15,10 @@ class Utilities {
         builder.setView(R.layout.loading_dialog)
 
         return builder.create();
+    }
+
+    // Long Toast
+    fun longToast(ctx: Context?, message: String?): Toast? {
+        return Toast.makeText(ctx, message, Toast.LENGTH_LONG)
     }
 }
