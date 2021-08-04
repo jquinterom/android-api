@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity() {
     // obtener lista de usuarios
     private fun getAllUsers(context: Context) {
         try {
-            val url = Endpoints.URL_BASE + Endpoints.GET_USERS
+            val url = Endpoints().URL_BASE + Endpoints().GET_USERS
             val stringRequest = StringRequest(
                 Request.Method.GET, url,
                 { response ->
