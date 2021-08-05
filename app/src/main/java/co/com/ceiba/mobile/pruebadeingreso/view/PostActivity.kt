@@ -1,6 +1,6 @@
 package co.com.ceiba.mobile.pruebadeingreso.view
 
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import co.com.ceiba.mobile.pruebadeingreso.R
@@ -20,11 +20,18 @@ class PostActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_post)
 
-        getPostByUserId()
+        val userId = intent.getIntExtra("USER_ID", -1)
+        if (userId == -1){
+            // no ha llegado un id correcto
+            Utilities().longToast(this, getString(R.string.generic_error))?.show()
+        } else {
+            getPostByUserId(userId)
+        }
+
     }
 
     // obtener listado de post del usuario
-    private fun getPostByUserId(){
+    private fun getPostByUserId(userId: Int){
         val dialog = Utilities().progressDialog(this)
         dialog.show()
 
@@ -37,9 +44,7 @@ class PostActivity : AppCompatActivity() {
                     Request.Method.GET, url,
             { response ->
                 val gson = Gson()
-                val posts = gson.fromJson(response, Array<User.UserInfo>::class.java)
-
-                Log.d("posts", posts.size.toString())
+                val posts = gson.fromJson(response, Array<User>::class.java)
                 // agregar usuarios a adaptador de lista
                 dialog.dismiss()
             },
