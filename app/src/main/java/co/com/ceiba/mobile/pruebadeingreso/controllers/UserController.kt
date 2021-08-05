@@ -25,7 +25,7 @@ class UserController {
         return mInstance
     }
 
-    // Registrar comentario
+    // Registrar usuario
     fun registerUser(user: User?): Boolean {
         return manager!!.registerUser(user!!)
     }
@@ -33,6 +33,11 @@ class UserController {
     // obtener usuarios
     fun getAllUsers() : Array<User> {
         return manager!!.getUsers()
+    }
+
+    // obtener usuario por id
+    fun getUserById(userId: Int) : User{
+        return manager!!.getUserById(userId)
     }
 
 }

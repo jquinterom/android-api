@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity(), UserAdapter.OnUserClickListener {
 
     // region importaciones
     lateinit var recyclerView: RecyclerView
-    lateinit var editText: EditText
+    lateinit var editTextSearch: EditText
     // endregion
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity(), UserAdapter.OnUserClickListener {
 
     // inicializar elmentos
     private fun  initElements(){
-        editText = findViewById(R.id.editTextSearch)
+        editTextSearch = findViewById(R.id.editTextSearch)
         recyclerView = findViewById(R.id.recyclerViewSearchResults)
         recyclerView.layoutManager = LinearLayoutManager(this)
     }
