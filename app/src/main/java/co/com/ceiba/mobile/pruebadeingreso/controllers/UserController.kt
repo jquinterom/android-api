@@ -1,5 +1,6 @@
 package co.com.ceiba.mobile.pruebadeingreso.controllers
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
@@ -14,12 +15,11 @@ import co.com.ceiba.mobile.pruebadeingreso.view.MainActivity
 import com.android.volley.Request
 import com.android.volley.toolbox.StringRequest
 import com.google.gson.Gson
-import java.lang.Exception
 
 class UserController {
     constructor()
 
-    constructor(context: Context){
+    constructor(context: Context) {
         ctx = context
         manager = dbManager(context)
     }
@@ -33,7 +33,7 @@ class UserController {
     @Synchronized
     fun getInstance(context: Context?): UserController? {
         if (mInstance == null) {
-         mInstance = context?.let { UserController(it) }
+            mInstance = context?.let { UserController(it) }
         }
         return mInstance
     }
@@ -44,24 +44,24 @@ class UserController {
     }
 
     // obtener usuarios
-    fun getAllUsersDB() : Array<User> {
+    fun getAllUsersDB(): Array<User> {
         return manager!!.getUsers()
     }
 
     // obtener usuario por id
-    fun getUserById(userId: Int) : User{
+    fun getUserById(userId: Int): User {
         return manager!!.getUserById(userId)
     }
 
 
     // obtener lista de usuarios
-    fun getAllUsers(main : MainActivity, recyclerView : RecyclerView) {
+    fun getAllUsers(main: MainActivity, recyclerView: RecyclerView) {
         val dialog = Utilities().progressDialog(main)
         dialog.show()
 
         // Validar si existen los usuarios en la base de datos, sino, hacer la peticion y registrarlos
         val usersDB = getAllUsersDB()
-        if(usersDB.isEmpty()){ // Noe existe informacion
+        if (usersDB.isEmpty()) { // Noe existe informacion
             // No existe informacion
             try {
                 val url = Endpoints().URL_BASE + Endpoints().GET_USERS
@@ -72,21 +72,24 @@ class UserController {
                         users = gson.fromJson(response, Array<User>::class.java)
                         var registered = true
 
-                        for(user in users){
+                        for (user in users) {
                             val usr = User(user.id, user.name, user.email, user.phone, user.website)
                             // registrando usuario
-                            if(registered) {
+                            if (registered) {
                                 registered = UserController().getInstance(main)!!.registerUser(usr)
                             }
                         }
 
                         // cargando el recyclerview
-                        recyclerView.adapter = UserAdapter(main,
-                            users.toList() as MutableList<User>, main)
+                        recyclerView.adapter = UserAdapter(
+                            main,
+                            users.toList() as ArrayList<User>, main
+                        )
 
                         // Validar si ha ocurrido un error
-                        if(!registered){
-                            Utilities().longToast(main, main.getString(R.string.generic_error))!!.show()
+                        if (!registered) {
+                            Utilities().longToast(main, main.getString(R.string.generic_error))!!
+                                .show()
                         }
 
                         dialog.dismiss()
@@ -97,29 +100,31 @@ class UserController {
                         Utilities().longToast(main, main.getString(R.string.generic_error))!!.show()
                     })
                 MySingleton.getInstance(main).addToRequestQueue(stringRequest)
-            } catch (e : Exception){
+            } catch (e: Exception) {
                 e.printStackTrace()
                 dialog.dismiss()
                 Utilities().longToast(main, main.getString(R.string.generic_error))!!.show()
             }
         } else {
             // Carga local de usuarios
-            recyclerView.adapter = UserAdapter(main, usersDB.toList() as MutableList<User>, main)
+            recyclerView.adapter = UserAdapter(main, usersDB.toList() as ArrayList<User>, main)
             dialog.dismiss()
         }
     }
 
-    fun filter(ch : CharSequence?, main : MainActivity, recyclerView: RecyclerView){
-        if(ch?.length == 0 ){
-            // Cargar todos los usuarios de la base de datos
-            recyclerView.adapter = UserAdapter(main, users.toMutableList(), main)
-            Log.d("cerooo", users.toMutableList().toString())
+    // Filtro para los usuarios
+    fun filter(users: Array<User>, main : MainActivity, recyclerView: RecyclerView, ch : CharSequence?){
+        if(ch.toString().isNotEmpty()){
+            val newUsers : ArrayList<User> = arrayListOf()
+            users.forEach {
+                if(it.name.lowercase().contains(ch.toString().lowercase())){
+                    newUsers.add(it)
+                }
+            }
+            recyclerView.adapter = UserAdapter(main, newUsers, main)
         } else {
-            // Buscar
-            Log.d("datoss", "datosss")
-            ch?.let { UserAdapter(main, users.toMutableList(), main).filter(it) }
+            recyclerView.adapter = UserAdapter(main, users.toList() as ArrayList<User>, main)
         }
     }
-
 
 }

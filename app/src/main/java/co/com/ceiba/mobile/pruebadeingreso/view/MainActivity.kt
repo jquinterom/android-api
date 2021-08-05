@@ -7,11 +7,9 @@ import android.text.Editable
 import android.text.TextWatcher
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import android.util.Log
 import android.widget.EditText
 import co.com.ceiba.mobile.pruebadeingreso.R
 import co.com.ceiba.mobile.pruebadeingreso.controllers.UserController
-import co.com.ceiba.mobile.pruebadeingreso.helpers.MySingleton
 import co.com.ceiba.mobile.pruebadeingreso.helpers.adapters.UserAdapter
 import co.com.ceiba.mobile.pruebadeingreso.models.User
 import co.com.ceiba.mobile.pruebadeingreso.rest.Endpoints
@@ -19,7 +17,6 @@ import co.com.ceiba.mobile.pruebadeingreso.utilities.Utilities
 import com.android.volley.Request
 import com.android.volley.toolbox.StringRequest
 import com.google.gson.Gson
-import java.lang.Exception
 
 class MainActivity : AppCompatActivity(), UserAdapter.OnUserClickListener {
 
@@ -35,8 +32,9 @@ class MainActivity : AppCompatActivity(), UserAdapter.OnUserClickListener {
         initElements()
 
         // obteniendo lista de usuarios
-        val userController = UserController().getInstance(this)
-        userController?.getAllUsers(this, recyclerView)
+        UserController().getInstance(this)?.getAllUsers(this, recyclerView)
+
+        val users = UserController().getInstance(this)?.getAllUsersDB()
         val main = this
 
         // filtrando la informacion
@@ -45,7 +43,9 @@ class MainActivity : AppCompatActivity(), UserAdapter.OnUserClickListener {
             override fun afterTextChanged(p0: Editable?) {}
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                userController?.filter(p0, main, recyclerView)
+                   UserController().getInstance(main)?.filter(
+                       users!!, main, recyclerView, p0
+                   )
             }
         })
     }
@@ -62,9 +62,6 @@ class MainActivity : AppCompatActivity(), UserAdapter.OnUserClickListener {
             putExtra("USER_ID", id)
         }
         startActivity(intent)
-    }
-
-    private fun filter(){
     }
 
 }
