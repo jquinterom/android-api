@@ -1,11 +1,7 @@
 package co.com.ceiba.mobile.pruebadeingreso.models
 
-class Post {
+data class Post (val userId: Int,
+                 val id : Int,
+                 val title : String,
+                 val body : String)
 
-    data class PostInfo(
-        val userId: Int,
-        val id : Int,
-        val title : String,
-        val body : String
-    )
-}
