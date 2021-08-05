@@ -2,7 +2,9 @@ package co.com.ceiba.mobile.pruebadeingreso.controllers
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.util.Log
+import android.view.LayoutInflater
+import android.widget.LinearLayout
+import android.widget.RelativeLayout
 import androidx.recyclerview.widget.RecyclerView
 import co.com.ceiba.mobile.pruebadeingreso.R
 import co.com.ceiba.mobile.pruebadeingreso.database.dbManager
@@ -113,6 +115,7 @@ class UserController {
     }
 
     // Filtro para los usuarios
+    @SuppressLint("InflateParams")
     fun filter(users: Array<User>, main : MainActivity, recyclerView: RecyclerView, ch : CharSequence?){
         if(ch.toString().isNotEmpty()){
             val newUsers : ArrayList<User> = arrayListOf()
@@ -121,7 +124,11 @@ class UserController {
                     newUsers.add(it)
                 }
             }
-            recyclerView.adapter = UserAdapter(main, newUsers, main)
+            if(newUsers.size != 0) {
+                recyclerView.adapter = UserAdapter(main, newUsers, main)
+            } else {
+                //
+            }
         } else {
             recyclerView.adapter = UserAdapter(main, users.toList() as ArrayList<User>, main)
         }
