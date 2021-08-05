@@ -27,6 +27,7 @@ class UserController {
     private var manager: dbManager? = null
     private var mInstance: UserController? = null
     private var ctx: Context? = null
+    private var users: Array<User> = emptyArray()
 
 
     @Synchronized
@@ -43,7 +44,7 @@ class UserController {
     }
 
     // obtener usuarios
-    private fun getAllUsersDB() : Array<User> {
+    fun getAllUsersDB() : Array<User> {
         return manager!!.getUsers()
     }
 
@@ -68,7 +69,7 @@ class UserController {
                     Request.Method.GET, url,
                     { response ->
                         val gson = Gson()
-                        val users = gson.fromJson(response, Array<User>::class.java)
+                        users = gson.fromJson(response, Array<User>::class.java)
                         var registered = true
 
                         for(user in users){
@@ -80,7 +81,8 @@ class UserController {
                         }
 
                         // cargando el recyclerview
-                        recyclerView.adapter = UserAdapter(main, users.toList(), main)
+                        recyclerView.adapter = UserAdapter(main,
+                            users.toList() as MutableList<User>, main)
 
                         // Validar si ha ocurrido un error
                         if(!registered){
@@ -102,8 +104,20 @@ class UserController {
             }
         } else {
             // Carga local de usuarios
-            recyclerView.adapter = UserAdapter(main, usersDB.toList(), main)
+            recyclerView.adapter = UserAdapter(main, usersDB.toList() as MutableList<User>, main)
             dialog.dismiss()
+        }
+    }
+
+    fun filter(ch : CharSequence?, main : MainActivity, recyclerView: RecyclerView){
+        if(ch?.length == 0 ){
+            // Cargar todos los usuarios de la base de datos
+            recyclerView.adapter = UserAdapter(main, users.toMutableList(), main)
+            Log.d("cerooo", users.toMutableList().toString())
+        } else {
+            // Buscar
+            Log.d("datoss", "datosss")
+            ch?.let { UserAdapter(main, users.toMutableList(), main).filter(it) }
         }
     }
 

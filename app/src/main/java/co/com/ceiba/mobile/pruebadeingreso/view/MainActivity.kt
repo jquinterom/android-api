@@ -3,6 +3,8 @@ package co.com.ceiba.mobile.pruebadeingreso.view
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import android.util.Log
@@ -24,6 +26,7 @@ class MainActivity : AppCompatActivity(), UserAdapter.OnUserClickListener {
     // region importaciones
     lateinit var recyclerView: RecyclerView
     private lateinit var editTextSearch: EditText
+
     // endregion
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,7 +35,19 @@ class MainActivity : AppCompatActivity(), UserAdapter.OnUserClickListener {
         initElements()
 
         // obteniendo lista de usuarios
-        UserController().getInstance(this)?.getAllUsers(this, recyclerView)
+        val userController = UserController().getInstance(this)
+        userController?.getAllUsers(this, recyclerView)
+        val main = this
+
+        // filtrando la informacion
+        editTextSearch.addTextChangedListener(object : TextWatcher{
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+            override fun afterTextChanged(p0: Editable?) {}
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                userController?.filter(p0, main, recyclerView)
+            }
+        })
     }
 
     // inicializar elmentos
@@ -42,7 +57,6 @@ class MainActivity : AppCompatActivity(), UserAdapter.OnUserClickListener {
         recyclerView.layoutManager = LinearLayoutManager(this)
     }
 
-
     override fun onButtonClick(id: Int) {
         val intent = Intent(this, PostActivity::class.java).apply {
             putExtra("USER_ID", id)
@@ -51,7 +65,6 @@ class MainActivity : AppCompatActivity(), UserAdapter.OnUserClickListener {
     }
 
     private fun filter(){
-
     }
 
 }
