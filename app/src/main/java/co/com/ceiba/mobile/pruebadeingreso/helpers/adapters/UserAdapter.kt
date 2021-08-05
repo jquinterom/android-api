@@ -1,19 +1,18 @@
 package co.com.ceiba.mobile.pruebadeingreso.helpers.adapters
 
 import android.content.Context
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
 import co.com.ceiba.mobile.pruebadeingreso.R
 import co.com.ceiba.mobile.pruebadeingreso.helpers.BaseViewHolder
 import co.com.ceiba.mobile.pruebadeingreso.models.Post
 import co.com.ceiba.mobile.pruebadeingreso.models.User
-import java.lang.IllegalArgumentException
 
-class UserAdapter(val context: Context, val listUsers : List<User>, private val itemClickListener: OnUserClickListener)
+class UserAdapter(val context: Context, private val listUsers : List<User>, private val itemClickListener: OnUserClickListener)
     : RecyclerView.Adapter<BaseViewHolder<*>>() {
 
     interface OnUserClickListener{

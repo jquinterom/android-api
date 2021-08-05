@@ -1,8 +1,8 @@
 package co.com.ceiba.mobile.pruebadeingreso.utilities
 
 import android.content.Context
-import androidx.appcompat.app.AlertDialog
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import co.com.ceiba.mobile.pruebadeingreso.R
 
 
@@ -14,7 +14,7 @@ class Utilities {
         builder.setCancelable(false) // if you want user to wait for some process to finish,
         builder.setView(R.layout.loading_dialog)
 
-        return builder.create();
+        return builder.create()
     }
 
     // Long Toast
