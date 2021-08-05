@@ -2,8 +2,7 @@ package co.com.ceiba.mobile.pruebadeingreso.controllers
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.view.LayoutInflater
-import android.widget.LinearLayout
+import android.view.Gravity
 import android.widget.RelativeLayout
 import androidx.recyclerview.widget.RecyclerView
 import co.com.ceiba.mobile.pruebadeingreso.R
@@ -116,22 +115,31 @@ class UserController {
 
     // Filtro para los usuarios
     @SuppressLint("InflateParams")
-    fun filter(users: Array<User>, main : MainActivity, recyclerView: RecyclerView, ch : CharSequence?){
-        if(ch.toString().isNotEmpty()){
-            val newUsers : ArrayList<User> = arrayListOf()
+    fun filter(
+        users: Array<User>,
+        main: MainActivity,
+        recyclerView: RecyclerView,
+        ch: CharSequence?
+    ) {
+        if (ch.toString().isNotEmpty()) {
+            val itemsLayout: RelativeLayout = main.findViewById(R.id.content)
+            val view = main.layoutInflater.inflate(R.layout.empty_view, null)
+            val newUsers: ArrayList<User> = arrayListOf()
+
             users.forEach {
-                if(it.name.lowercase().contains(ch.toString().lowercase())){
+                if (it.name.lowercase().contains(ch.toString().lowercase())) {
                     newUsers.add(it)
                 }
             }
-            if(newUsers.size != 0) {
-                recyclerView.adapter = UserAdapter(main, newUsers, main)
+            if (newUsers.size == 0) {
+                itemsLayout.gravity = Gravity.BOTTOM
+                itemsLayout.addView(view)
             } else {
-                //
+                itemsLayout.removeView(view)
             }
+            recyclerView.adapter = UserAdapter(main, newUsers, main)
         } else {
             recyclerView.adapter = UserAdapter(main, users.toList() as ArrayList<User>, main)
         }
     }
-
 }
