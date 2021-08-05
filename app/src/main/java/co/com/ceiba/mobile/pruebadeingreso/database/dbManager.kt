@@ -1,28 +1,21 @@
 package co.com.ceiba.mobile.pruebadeingreso.database
 
-import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.provider.BaseColumns
-import android.util.Log
 import co.com.ceiba.mobile.pruebadeingreso.models.Post
 import co.com.ceiba.mobile.pruebadeingreso.models.User
-import java.lang.Exception
 
-class dbManager{
+class dbManager {
     constructor()
-    constructor(context: Context){
+    constructor(context: Context) {
         val helper = dbHelper(context)
         db = helper.writableDatabase
         db = helper.readableDatabase
     }
 
     private var db: SQLiteDatabase? = null
-    private var values: ContentValues? = null
-    private val response: String? = null
-    private val ALL_COLUMNS = arrayOf("*")
-
 
     object TABLES {
         // Tabla de usuarios
@@ -45,8 +38,6 @@ class dbManager{
         }
     }
 
-
-
     // region definicion de tablas
     val CREATE_TABLE_USERS = "CREATE TABLE IF NOT EXISTS ${TABLES.USERS.TABLE_NAME}" +
             "(${TABLES.USERS.COLUMN_NAME_ID} INTEGER PRIMARY KEY AUTOINCREMENT," +
@@ -63,7 +54,6 @@ class dbManager{
     // endregion
 
     // region consultas
-
     // Proceso para registrar usuario en la base de datos
     fun registerUser(user: User): Boolean {
         var response = true
@@ -76,7 +66,12 @@ class dbManager{
                 put(TABLES.USERS.COLUMN_NAME_PHONE, user.phone)
                 put(TABLES.USERS.COLUMN_NAME_WEBSITE, user.website)
             }
-            db!!.insertWithOnConflict(TABLES.USERS.TABLE_NAME, null, values, SQLiteDatabase.CONFLICT_REPLACE)
+            db!!.insertWithOnConflict(
+                TABLES.USERS.TABLE_NAME,
+                null,
+                values,
+                SQLiteDatabase.CONFLICT_REPLACE
+            )
         } catch (e: Exception) {
             e.printStackTrace()
             response = false
@@ -85,7 +80,7 @@ class dbManager{
     }
 
 
-    // Proceso para registrar post en la base de datos
+    // Registrar post en la base de datos
     fun registerPost(post: Post): Boolean {
         var response = true
         try {
@@ -107,9 +102,14 @@ class dbManager{
     // Recuperar los usuarios
     fun getUsers(): Array<User> {
         // colmuns
-        val projection = arrayOf(TABLES.USERS.COLUMN_NAME_ID, TABLES.USERS.COLUMN_NAME_NAME,
-            TABLES.USERS.COLUMN_NAME_EMAIL, TABLES.USERS.COLUMN_NAME_PHONE, TABLES.USERS.COLUMN_NAME_WEBSITE)
-        val response : MutableList<User> = mutableListOf()
+        val projection = arrayOf(
+            TABLES.USERS.COLUMN_NAME_ID,
+            TABLES.USERS.COLUMN_NAME_NAME,
+            TABLES.USERS.COLUMN_NAME_EMAIL,
+            TABLES.USERS.COLUMN_NAME_PHONE,
+            TABLES.USERS.COLUMN_NAME_WEBSITE
+        )
+        val response: MutableList<User> = mutableListOf()
         try {
             val cursor = db?.query(
                 TABLES.USERS.TABLE_NAME,   // Tabla a consultar
@@ -123,7 +123,13 @@ class dbManager{
             with(cursor) {
                 while (this!!.moveToNext()) {
                     cursor?.let {
-                        val user = User(it.getInt(0), it.getString(1), it.getString(2), it.getString(3), it.getString(4))
+                        val user = User(
+                            it.getInt(0),
+                            it.getString(1),
+                            it.getString(2),
+                            it.getString(3),
+                            it.getString(4)
+                        )
                         response.add(user)
                     }
                 }
@@ -132,17 +138,20 @@ class dbManager{
         } catch (e: Exception) {
             e.printStackTrace()
         }
-        return response.toTypedArray() ?: emptyArray()
+        return response.toTypedArray()
     }
 
-    // ** crear proceso de carga de usuario por id****+
-
-    fun getUserById(userId: Int) : User{
+    fun getUserById(userId: Int): User {
         var response: User? = null
         val selection = "${TABLES.USERS.COLUMN_NAME_ID} = ?"
-        try{
-            val projection = arrayOf(TABLES.USERS.COLUMN_NAME_ID, TABLES.USERS.COLUMN_NAME_NAME,
-                TABLES.USERS.COLUMN_NAME_EMAIL, TABLES.USERS.COLUMN_NAME_PHONE, TABLES.USERS.COLUMN_NAME_WEBSITE)
+        try {
+            val projection = arrayOf(
+                TABLES.USERS.COLUMN_NAME_ID,
+                TABLES.USERS.COLUMN_NAME_NAME,
+                TABLES.USERS.COLUMN_NAME_EMAIL,
+                TABLES.USERS.COLUMN_NAME_PHONE,
+                TABLES.USERS.COLUMN_NAME_WEBSITE
+            )
             val cursor = db?.query(
                 TABLES.USERS.TABLE_NAME,
                 projection,
@@ -154,14 +163,21 @@ class dbManager{
                 null
             )
 
-            with(cursor){
-                while (this!!.moveToNext()){
+            with(cursor) {
+                while (this!!.moveToNext()) {
                     cursor?.let {
-                        response = User(it.getInt(0), it.getString(1), it.getString(2), it.getString(3), it.getString(4))
+                        response = User(
+                            it.getInt(0),
+                            it.getString(1),
+                            it.getString(2),
+                            it.getString(3),
+                            it.getString(4)
+                        )
                     }
                 }
             }
-        } catch (e : Exception){
+            cursor?.close()
+        } catch (e: Exception) {
             e.printStackTrace()
         }
         return response!!
@@ -171,10 +187,12 @@ class dbManager{
     // Recuperar los posts or usuario
     fun getPosts(userId: Int): Array<Post> {
         // colmuns
-        val projection = arrayOf(TABLES.POSTS.COLUMN_NAME_ID, TABLES.POSTS.COLUMN_NAME_USER_ID,
-            TABLES.POSTS.COLUMN_NAME_TITLE, TABLES.POSTS.COLUMN_NAME_BODY)
+        val projection = arrayOf(
+            TABLES.POSTS.COLUMN_NAME_ID, TABLES.POSTS.COLUMN_NAME_USER_ID,
+            TABLES.POSTS.COLUMN_NAME_TITLE, TABLES.POSTS.COLUMN_NAME_BODY
+        )
         val selection = "${TABLES.POSTS.COLUMN_NAME_USER_ID} = ?"
-        val response : MutableList<Post> = mutableListOf()
+        val response: MutableList<Post> = mutableListOf()
 
         try {
             val cursor = db?.query(
@@ -188,22 +206,19 @@ class dbManager{
             )
             with(cursor) {
                 while (this!!.moveToNext()) {
-                   cursor?.let {
-                       val post = Post(it.getInt(1), it.getInt(0), it.getString(2), it.getString(3) )
-                       response.add(post)
-                   }
+                    cursor?.let {
+                        val post =
+                            Post(it.getInt(1), it.getInt(0), it.getString(2), it.getString(3))
+                        response.add(post)
+                    }
                 }
             }
-            // cursor.close()
+            cursor?.close()
         } catch (e: Exception) {
             e.printStackTrace()
         }
         return response.toTypedArray()
     }
-
-
-
-
     //endregion
 
 }

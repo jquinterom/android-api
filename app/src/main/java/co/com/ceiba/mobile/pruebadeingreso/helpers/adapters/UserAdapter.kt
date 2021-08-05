@@ -12,7 +12,7 @@ import co.com.ceiba.mobile.pruebadeingreso.helpers.BaseViewHolder
 import co.com.ceiba.mobile.pruebadeingreso.models.Post
 import co.com.ceiba.mobile.pruebadeingreso.models.User
 
-class UserAdapter(val context: Context, val listUsers : List<User>, private val itemClickListener: OnUserClickListener)
+class UserAdapter(val context: Context, private val listUsers : List<User>, private val itemClickListener: OnUserClickListener)
     : RecyclerView.Adapter<BaseViewHolder<*>>() {
 
     interface OnUserClickListener{
