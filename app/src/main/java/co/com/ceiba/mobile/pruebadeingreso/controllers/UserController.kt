@@ -26,12 +26,12 @@ class UserController {
     }
 
     // Registrar comentario
-    fun registerUser(user: User.UserInfo?): Boolean {
+    fun registerUser(user: User?): Boolean {
         return manager!!.registerUser(user!!)
     }
 
     // obtener usuarios
-    fun getAllUsers() : Array<User.UserInfo> {
+    fun getAllUsers() : Array<User> {
         return manager!!.getUsers()
     }
 
