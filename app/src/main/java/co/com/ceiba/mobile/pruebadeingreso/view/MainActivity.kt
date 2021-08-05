@@ -88,7 +88,7 @@ class MainActivity : AppCompatActivity(), UserAdapter.OnUserClickListener {
                 dialog.dismiss()
             }
         } else {
-            // cargando el recyclerview *************+++
+            // Carga local de usuarios
             recyclerView.adapter = usersDB?.let { UserAdapter(this, it.toList(), this) }
             dialog.dismiss()
         }
