@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import co.com.ceiba.mobile.pruebadeingreso.R
 import co.com.ceiba.mobile.pruebadeingreso.controllers.PostController
+import co.com.ceiba.mobile.pruebadeingreso.controllers.UserController
 import co.com.ceiba.mobile.pruebadeingreso.helpers.MySingleton
 import co.com.ceiba.mobile.pruebadeingreso.helpers.adapters.PostAdapter
 import co.com.ceiba.mobile.pruebadeingreso.models.Post
@@ -36,7 +37,6 @@ class PostActivity : AppCompatActivity() {
         } else {
             getPostByUserId(userId)
         }
-
     }
 
     // inicializar elmentos
@@ -53,6 +53,9 @@ class PostActivity : AppCompatActivity() {
     private fun getPostByUserId(userId: Int) {
         val dialog = Utilities().progressDialog(this)
         dialog.show()
+
+        // Cargar el usuario
+        loadUser(userId)
 
         // validar si existen los post registrados en en base de datos, si existen mostrar
         val postsDB = PostController().getInstance(this)?.getPostByUserId(userId)
@@ -97,6 +100,19 @@ class PostActivity : AppCompatActivity() {
             // cargando el recyclerview
             recyclerView.adapter = PostAdapter(this, postsDB!!.toList())
             dialog.dismiss()
+        }
+    }
+
+
+    private fun loadUser(userId: Int){
+        try {
+            val user = UserController().getInstance(this)?.getUserById(userId)
+            tvName.text = user!!.name
+            tvPhone.text = user.phone
+            tvEmail.text = user.email
+
+        } catch (e : java.lang.Exception){
+            e.printStackTrace()
         }
     }
 }

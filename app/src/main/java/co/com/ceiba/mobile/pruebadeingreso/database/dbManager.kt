@@ -137,6 +137,35 @@ class dbManager{
 
     // ** crear proceso de carga de usuario por id****+
 
+    fun getUserById(userId: Int) : User{
+        var response: User? = null
+        val selection = "${TABLES.USERS.COLUMN_NAME_ID} = ?"
+        try{
+            val projection = arrayOf(TABLES.USERS.COLUMN_NAME_ID, TABLES.USERS.COLUMN_NAME_NAME,
+                TABLES.USERS.COLUMN_NAME_EMAIL, TABLES.USERS.COLUMN_NAME_PHONE, TABLES.USERS.COLUMN_NAME_WEBSITE)
+            val cursor = db?.query(
+                TABLES.USERS.TABLE_NAME,
+                projection,
+                selection,
+                arrayOf(userId.toString()),
+                null,
+                null,
+                null,
+                null
+            )
+
+            with(cursor){
+                while (this!!.moveToNext()){
+                    cursor?.let {
+                        response = User(it.getInt(0), it.getString(1), it.getString(2), it.getString(3), it.getString(4))
+                    }
+                }
+            }
+        } catch (e : Exception){
+            e.printStackTrace()
+        }
+        return response!!
+    }
 
 
     // Recuperar los posts or usuario
@@ -157,13 +186,11 @@ class dbManager{
                 null,
                 null
             )
-            val itemIds = mutableListOf<Long>()
             with(cursor) {
                 while (this!!.moveToNext()) {
                    cursor?.let {
                        val post = Post(it.getInt(1), it.getInt(0), it.getString(2), it.getString(3) )
                        response.add(post)
-                       Log.d("posts", response.toString())
                    }
                 }
             }
@@ -171,8 +198,6 @@ class dbManager{
         } catch (e: Exception) {
             e.printStackTrace()
         }
-
-        Log.d("posts", response.toString())
         return response.toTypedArray()
     }
 
