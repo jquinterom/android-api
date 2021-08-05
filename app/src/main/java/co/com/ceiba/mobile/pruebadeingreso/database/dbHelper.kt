@@ -4,7 +4,8 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 
-class dbHelper constructor(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
+class dbHelper constructor(context: Context) :
+    SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
     override fun onCreate(db: SQLiteDatabase?) {
         db!!.execSQL(dbManager().CREATE_TABLE_USERS)
@@ -27,7 +28,4 @@ class dbHelper constructor(context: Context) : SQLiteOpenHelper(context, DATABAS
         const val DATABASE_VERSION = 1
         const val DATABASE_NAME = "posts.db"
     }
-
-
-
 }
