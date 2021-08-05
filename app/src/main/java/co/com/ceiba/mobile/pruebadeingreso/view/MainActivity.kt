@@ -60,9 +60,6 @@ class MainActivity : AppCompatActivity(), UserAdapter.OnUserClickListener {
                         val users = gson.fromJson(response, Array<User>::class.java)
                         var registered = true
 
-
-                        // Validar el registro de usuario ya que no funciona
-
                         for(user in users){
                             val usr = User(user.id, user.name, user.email, user.phone, user.website)
                             // registrando usuario
@@ -79,7 +76,6 @@ class MainActivity : AppCompatActivity(), UserAdapter.OnUserClickListener {
                             Utilities().longToast(this, getString(R.string.generic_error))!!.show()
                         }
 
-                        // agregar usuarios a adaptador de lista
                         dialog.dismiss()
                     },
                     { error ->
@@ -93,7 +89,7 @@ class MainActivity : AppCompatActivity(), UserAdapter.OnUserClickListener {
             }
         } else {
             // cargando el recyclerview *************+++
-            // recyclerView.adapter = usersDB?.let { UserAdapter(this, it.toList()) }
+            recyclerView.adapter = usersDB?.let { UserAdapter(this, it.toList(), this) }
             dialog.dismiss()
         }
     }

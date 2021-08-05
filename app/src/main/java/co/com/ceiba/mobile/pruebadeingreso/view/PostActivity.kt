@@ -45,8 +45,6 @@ class PostActivity : AppCompatActivity() {
             { response ->
                 val gson = Gson()
                 val posts = gson.fromJson(response, Array<User>::class.java)
-
-                Log.d("posts", posts.size.toString())
                 // agregar usuarios a adaptador de lista
                 dialog.dismiss()
             },
