@@ -20,7 +20,7 @@ class MySingletonTest : TestCase() {
 
     // Test para verificar la conexión con el API, con lo cual se cerciora de que hay conexion via HTTP al API
     fun testAddToRequestQueue() {
-        val url = Endpoints.URL_BASE + Endpoints.GET_USERS
+        val url = Endpoints().URL_BASE + Endpoints().GET_USERS
         val stringRequest = StringRequest(Request.Method.GET, url,
             { response ->
                 Log.d("Response", response.toString())

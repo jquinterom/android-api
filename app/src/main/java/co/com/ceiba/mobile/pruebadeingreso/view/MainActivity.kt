@@ -1,29 +1,26 @@
 package co.com.ceiba.mobile.pruebadeingreso.view
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.widget.EditText
+import android.widget.LinearLayout
+import android.widget.RelativeLayout
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import android.util.Log
-import android.widget.EditText
 import co.com.ceiba.mobile.pruebadeingreso.R
 import co.com.ceiba.mobile.pruebadeingreso.controllers.UserController
-import co.com.ceiba.mobile.pruebadeingreso.helpers.MySingleton
 import co.com.ceiba.mobile.pruebadeingreso.helpers.adapters.UserAdapter
-import co.com.ceiba.mobile.pruebadeingreso.models.User
-import co.com.ceiba.mobile.pruebadeingreso.rest.Endpoints
-import co.com.ceiba.mobile.pruebadeingreso.utilities.Utilities
-import com.android.volley.Request
-import com.android.volley.toolbox.StringRequest
-import com.google.gson.Gson
-import java.lang.Exception
+
 
 class MainActivity : AppCompatActivity(), UserAdapter.OnUserClickListener {
 
     // region importaciones
     lateinit var recyclerView: RecyclerView
-    lateinit var editText: EditText
+    private lateinit var editTextSearch: EditText
+
     // endregion
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,66 +29,29 @@ class MainActivity : AppCompatActivity(), UserAdapter.OnUserClickListener {
         initElements()
 
         // obteniendo lista de usuarios
-        getAllUsers()
+        UserController().getInstance(this)?.getAllUsers(this, recyclerView)
+
+        val users = UserController().getInstance(this)?.getAllUsersDB()
+        val main = this
+
+        // filtrando la informacion
+        editTextSearch.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+            override fun afterTextChanged(p0: Editable?) {}
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                UserController().getInstance(main)?.filter(
+                    users!!, main, recyclerView, p0
+                )
+            }
+        })
     }
 
     // inicializar elmentos
-    private fun  initElements(){
-        editText = findViewById(R.id.editTextSearch)
+    private fun initElements() {
+        editTextSearch = findViewById(R.id.editTextSearch)
         recyclerView = findViewById(R.id.recyclerViewSearchResults)
         recyclerView.layoutManager = LinearLayoutManager(this)
-    }
-
-    // obtener lista de usuarios
-    private fun getAllUsers() {
-        val dialog = Utilities().progressDialog(this)
-        dialog.show()
-
-        // Validar si existen los usuarios en la base de datos, sino, hacer la peticion y registrarlos
-        val usersDB = UserController().getInstance(this)?.getAllUsers()
-        if(usersDB?.size == 0 ){ // Noe existe informacion
-            // No existe informacion
-            try {
-                val url = Endpoints().URL_BASE + Endpoints().GET_USERS
-                val stringRequest = StringRequest(
-                    Request.Method.GET, url,
-                    { response ->
-                        val gson = Gson()
-                        val users = gson.fromJson(response, Array<User>::class.java)
-                        var registered = true
-
-                        for(user in users){
-                            val usr = User(user.id, user.name, user.email, user.phone, user.website)
-                            // registrando usuario
-                            if(registered) {
-                                registered = UserController().getInstance(this)!!.registerUser(usr)
-                            }
-                        }
-
-                        // cargando el recyclerview
-                        recyclerView.adapter = UserAdapter(this, users.toList(), this)
-
-                        // Validar si ha ocurrido un error
-                        if(!registered){
-                            Utilities().longToast(this, getString(R.string.generic_error))!!.show()
-                        }
-
-                        dialog.dismiss()
-                    },
-                    { error ->
-                        Log.e("error", error.toString())
-                        dialog.dismiss()
-                    })
-                MySingleton.getInstance(this).addToRequestQueue(stringRequest)
-            } catch (e : Exception){
-                e.printStackTrace()
-                dialog.dismiss()
-            }
-        } else {
-            // Carga local de usuarios
-            recyclerView.adapter = usersDB?.let { UserAdapter(this, it.toList(), this) }
-            dialog.dismiss()
-        }
     }
 
     override fun onButtonClick(id: Int) {
