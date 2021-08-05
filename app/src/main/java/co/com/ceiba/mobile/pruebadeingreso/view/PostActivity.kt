@@ -1,28 +1,21 @@
 package co.com.ceiba.mobile.pruebadeingreso.view
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.EditText
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import co.com.ceiba.mobile.pruebadeingreso.R
 import co.com.ceiba.mobile.pruebadeingreso.controllers.PostController
-import co.com.ceiba.mobile.pruebadeingreso.controllers.UserController
 import co.com.ceiba.mobile.pruebadeingreso.helpers.MySingleton
 import co.com.ceiba.mobile.pruebadeingreso.helpers.adapters.PostAdapter
-import co.com.ceiba.mobile.pruebadeingreso.helpers.adapters.UserAdapter
 import co.com.ceiba.mobile.pruebadeingreso.models.Post
-import co.com.ceiba.mobile.pruebadeingreso.models.User
 import co.com.ceiba.mobile.pruebadeingreso.rest.Endpoints
 import co.com.ceiba.mobile.pruebadeingreso.utilities.Utilities
 import com.android.volley.Request
-import com.android.volley.Response
-import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.StringRequest
 import com.google.gson.Gson
-import java.lang.Exception
 
 class PostActivity : AppCompatActivity() {
     lateinit var tvName: TextView
@@ -37,7 +30,7 @@ class PostActivity : AppCompatActivity() {
 
         initElements()
         val userId = intent.getIntExtra("USER_ID", -1)
-        if (userId == -1){
+        if (userId == -1) {
             // no ha llegado un id correcto
             Utilities().longToast(this, getString(R.string.generic_error))?.show()
         } else {
@@ -47,7 +40,7 @@ class PostActivity : AppCompatActivity() {
     }
 
     // inicializar elmentos
-    private fun  initElements(){
+    private fun initElements() {
         tvName = findViewById(R.id.name)
         tvPhone = findViewById(R.id.phone)
         tvEmail = findViewById(R.id.email)
@@ -57,15 +50,15 @@ class PostActivity : AppCompatActivity() {
     }
 
     // obtener listado de post del usuario
-    private fun getPostByUserId(userId: Int){
+    private fun getPostByUserId(userId: Int) {
         val dialog = Utilities().progressDialog(this)
         dialog.show()
 
         // validar si existen los post registrados en en base de datos, si existen mostrar
         val postsDB = PostController().getInstance(this)?.getPostByUserId(userId)
-        if(postsDB?.size == 0){
+        if (postsDB?.size == 0) {
             // No existen datos, realizar peticion
-            try{
+            try {
                 val url = Endpoints().URL_BASE + Endpoints().GET_POST_USER + "userid=" + userId
                 val stringRequest = StringRequest(
                     Request.Method.GET, url,
@@ -73,18 +66,9 @@ class PostActivity : AppCompatActivity() {
                         var registered = true
                         val gson = Gson()
                         val posts = gson.fromJson(response, Array<Post>::class.java)
-                        /*
-                        * for(user in users){
-                            val usr = User(user.id, user.name, user.email, user.phone, user.website)
-                            // registrando usuario
-                            if(registered) {
-                                registered = UserController().getInstance(this)!!.registerUser(usr)
-                            }
-                        }
-                        * */
-                        for (post in posts){
+                        for (post in posts) {
                             val pst = Post(post.userId, post.id, post.title, post.body)
-                            if(registered){
+                            if (registered) {
                                 registered = PostController().getInstance(this)!!.registerPost(pst)
                             }
 
@@ -94,7 +78,7 @@ class PostActivity : AppCompatActivity() {
                         recyclerView.adapter = PostAdapter(this, posts.toList())
 
                         // Validar si ha ocurrido un error
-                        if(!registered){
+                        if (!registered) {
                             Utilities().longToast(this, getString(R.string.generic_error))!!.show()
                         }
 
@@ -105,7 +89,7 @@ class PostActivity : AppCompatActivity() {
                         dialog.dismiss()
                     })
                 MySingleton.getInstance(this).addToRequestQueue(stringRequest)
-            } catch (e: Exception){
+            } catch (e: Exception) {
                 e.printStackTrace()
                 dialog.dismiss()
             }
@@ -114,7 +98,5 @@ class PostActivity : AppCompatActivity() {
             recyclerView.adapter = PostAdapter(this, postsDB!!.toList())
             dialog.dismiss()
         }
-
-
     }
 }
