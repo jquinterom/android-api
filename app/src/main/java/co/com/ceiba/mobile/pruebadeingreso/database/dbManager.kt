@@ -135,6 +135,8 @@ class dbManager{
         return response.toTypedArray() ?: emptyArray()
     }
 
+    // ** crear proceso de carga de usuario por id****+
+
 
 
     // Recuperar los posts or usuario
@@ -143,7 +145,7 @@ class dbManager{
         val projection = arrayOf(TABLES.POSTS.COLUMN_NAME_ID, TABLES.POSTS.COLUMN_NAME_USER_ID,
             TABLES.POSTS.COLUMN_NAME_TITLE, TABLES.POSTS.COLUMN_NAME_BODY)
         val selection = "${TABLES.POSTS.COLUMN_NAME_USER_ID} = ?"
-        var response : MutableList<Post>? = null
+        val response : MutableList<Post> = mutableListOf()
 
         try {
             val cursor = db?.query(
@@ -158,16 +160,20 @@ class dbManager{
             val itemIds = mutableListOf<Long>()
             with(cursor) {
                 while (this!!.moveToNext()) {
-                    Log.d("post", cursor.toString())
-                    val itemId = getLong(getColumnIndexOrThrow(TABLES.USERS.COLUMN_NAME_ID))
-                    itemIds.add(itemId)
+                   cursor?.let {
+                       val post = Post(it.getInt(1), it.getInt(0), it.getString(2), it.getString(3) )
+                       response.add(post)
+                       Log.d("posts", response.toString())
+                   }
                 }
             }
             // cursor.close()
         } catch (e: Exception) {
             e.printStackTrace()
         }
-        return response!!.toTypedArray()
+
+        Log.d("posts", response.toString())
+        return response.toTypedArray()
     }
 
 

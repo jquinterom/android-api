@@ -25,7 +25,7 @@ class UserController {
         return mInstance
     }
 
-    // Registrar comentario
+    // Registrar usuario
     fun registerUser(user: User?): Boolean {
         return manager!!.registerUser(user!!)
     }

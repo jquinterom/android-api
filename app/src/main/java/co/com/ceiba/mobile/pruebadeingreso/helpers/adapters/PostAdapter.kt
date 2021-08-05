@@ -31,6 +31,9 @@ class PostAdapter(val context: Context, val listPosts : List<Post>) : RecyclerVi
         override fun bind(item: Post, position: Int) {
             val itemTitle : TextView = itemView.findViewById(R.id.title)
             val itemBody : TextView = itemView.findViewById(R.id.body)
+
+            itemTitle.text = item.title
+            itemBody.text = item.body
         }
 
     }
