@@ -56,7 +56,7 @@ class PostController {
         if (postsDB.isEmpty()) {
             // No existen datos, realizar peticion
             try {
-                val url = Endpoints().URL_BASE + Endpoints().GET_POST_USER + "userid=" + userId
+                val url = Endpoints().URL_BASE + Endpoints().GET_POST_USER + "userId=" + userId
                 val stringRequest = StringRequest(
                     Request.Method.GET, url,
                     { response ->
