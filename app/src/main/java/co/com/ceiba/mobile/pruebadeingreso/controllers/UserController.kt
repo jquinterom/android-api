@@ -122,20 +122,11 @@ class UserController {
         ch: CharSequence?
     ) {
         if (ch.toString().isNotEmpty()) {
-            val itemsLayout: RelativeLayout = main.findViewById(R.id.content)
-            val view = main.layoutInflater.inflate(R.layout.empty_view, null)
             val newUsers: ArrayList<User> = arrayListOf()
-
             users.forEach {
                 if (it.name.lowercase().contains(ch.toString().lowercase())) {
                     newUsers.add(it)
                 }
-            }
-            if (newUsers.size == 0) {
-                itemsLayout.gravity = Gravity.BOTTOM
-                itemsLayout.addView(view)
-            } else {
-                itemsLayout.removeView(view)
             }
             recyclerView.adapter = UserAdapter(main, newUsers, main)
         } else {
