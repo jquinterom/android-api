@@ -1,7 +1,6 @@
 package co.com.ceiba.mobile.pruebadeingreso.helpers.adapters
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,10 +11,12 @@ import co.com.ceiba.mobile.pruebadeingreso.R
 import co.com.ceiba.mobile.pruebadeingreso.helpers.BaseViewHolder
 import co.com.ceiba.mobile.pruebadeingreso.models.User
 
+
 class UserAdapter(
     val context: Context,
     private var userList: ArrayList<User>,
-    private val itemClickListener: OnUserClickListener
+    private val itemClickListener: OnUserClickListener,
+    private val isEmpty: Boolean = false // Informa si el arreglo esta vacio
 ) : RecyclerView.Adapter<BaseViewHolder<*>>() {
 
     private var userFilterList: ArrayList<User> = ArrayList()
@@ -29,14 +30,24 @@ class UserAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<*> {
-        return UsersViewHolder(
-            LayoutInflater.from(context).inflate(R.layout.user_list_item, parent, false)
-        )
+        return when (isEmpty) {
+            true -> {
+                EmptyList(
+                    LayoutInflater.from(context).inflate(R.layout.empty_view, parent, false)
+                )
+            }
+            false -> {
+                UsersViewHolder(
+                    LayoutInflater.from(context).inflate(R.layout.user_list_item, parent, false)
+                )
+            }
+        }
     }
 
     override fun onBindViewHolder(holder: BaseViewHolder<*>, position: Int) {
         when (holder) {
             is UsersViewHolder -> holder.bind(userList[position], position)
+            is EmptyList -> holder.bind(userList[position], position)
             else -> throw IllegalArgumentException("No ha pasado el view holder")
         }
     }
@@ -54,5 +65,9 @@ class UserAdapter(
             itemEmail.text = item.email
             itemButton.setOnClickListener { itemClickListener.onButtonClick(item.id) }
         }
+    }
+
+    inner class EmptyList(itemView: View) : BaseViewHolder<User>(itemView) {
+        override fun bind(item: User, position: Int) {}
     }
 }
