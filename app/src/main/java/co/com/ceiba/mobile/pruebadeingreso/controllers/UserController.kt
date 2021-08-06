@@ -119,9 +119,14 @@ class UserController {
         recyclerView: RecyclerView,
         ch: CharSequence?
     ) {
+        this.users = users
+        if(users.isEmpty()){ // Se intenta obtener de nuevo los usuarios
+            this.users = getAllUsersDB()
+        }
+
         if (ch.toString().isNotEmpty()) {
             val newUsers: ArrayList<User> = arrayListOf()
-            users.forEach {
+            this.users.forEach {
                 if (it.name.lowercase().contains(ch.toString().lowercase())) {
                     newUsers.add(it)
                 }
@@ -130,11 +135,11 @@ class UserController {
             if (recyclerView.adapter?.itemCount == 0) { // Informar que el arreglo esta vacio
                 recyclerView.adapter = UserAdapter(
                     main,
-                    users.toList() as ArrayList<User>, main, true
+                    this.users.toList() as ArrayList<User>, main, true
                 )
             }
         } else {
-            recyclerView.adapter = UserAdapter(main, users.toList() as ArrayList<User>, main)
+            recyclerView.adapter = UserAdapter(main, this.users.toList() as ArrayList<User>, main)
         }
     }
 }
