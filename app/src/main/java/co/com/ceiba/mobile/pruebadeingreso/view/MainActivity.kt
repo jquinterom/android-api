@@ -28,7 +28,6 @@ class MainActivity : AppCompatActivity(), UserAdapter.OnUserClickListener {
 
         // obteniendo lista de usuarios
         UserController().getInstance(this)?.getAllUsers(this, recyclerView)
-
         val users = UserController().getInstance(this)?.getAllUsersDB()
         val main = this
 
@@ -38,9 +37,13 @@ class MainActivity : AppCompatActivity(), UserAdapter.OnUserClickListener {
             override fun afterTextChanged(p0: Editable?) {}
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                UserController().getInstance(main)?.filter(
-                    users!!, main, recyclerView, p0
-                )
+                try {
+                    UserController().getInstance(main)?.filter(
+                        users!!, main, recyclerView, p0
+                    )
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
             }
         })
     }
