@@ -2,8 +2,6 @@ package co.com.ceiba.mobile.pruebadeingreso.controllers
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.view.Gravity
-import android.widget.RelativeLayout
 import androidx.recyclerview.widget.RecyclerView
 import co.com.ceiba.mobile.pruebadeingreso.R
 import co.com.ceiba.mobile.pruebadeingreso.database.dbManager
@@ -122,22 +120,19 @@ class UserController {
         ch: CharSequence?
     ) {
         if (ch.toString().isNotEmpty()) {
-            val itemsLayout: RelativeLayout = main.findViewById(R.id.content)
-            val view = main.layoutInflater.inflate(R.layout.empty_view, null)
             val newUsers: ArrayList<User> = arrayListOf()
-
             users.forEach {
                 if (it.name.lowercase().contains(ch.toString().lowercase())) {
                     newUsers.add(it)
                 }
             }
-            if (newUsers.size == 0) {
-                itemsLayout.gravity = Gravity.BOTTOM
-                itemsLayout.addView(view)
-            } else {
-                itemsLayout.removeView(view)
-            }
             recyclerView.adapter = UserAdapter(main, newUsers, main)
+            if (recyclerView.adapter?.itemCount == 0) { // Informar que el arreglo esta vacio
+                recyclerView.adapter = UserAdapter(
+                    main,
+                    users.toList() as ArrayList<User>, main, true
+                )
+            }
         } else {
             recyclerView.adapter = UserAdapter(main, users.toList() as ArrayList<User>, main)
         }
