@@ -1,17 +1,16 @@
-# ceiba-android
+# SusPosts
+Aplicacion Android para obtener listado de posts por usuarios a [API](https://jsonplaceholder.typicode.com/) en línea. Se requiere de conexión a internet para el correcto funcionamiento.  
 
-## Descripción
-Aplicación construida con librerías como Volley para peticiones HTTP al API. También se usó la forma
-nativa de android para el almacenamiento de los datos localmente. Se usaron interfaces predeterminadas
-con código limpio
-
-### Pruebas unitarias
-Para las pruebas unitarias se usó la librería de *Junit versión 3*
+DEV-Requerimientos:
+- [SDK 21 Lollipop o mayor](https://developer.android.com/about/versions/android-5.0?hl=es-419)
+- Gradle 7.0 o mayor
+- [Android Studio](https://developer.android.com/studio?gclid=EAIaIQobChMI8qfUocre8gIVg-iGCh1qFQq7EAAYASAAEgLX0PD_BwE&gclsrc=aw.ds)
+- [Kotlin](https://developer.android.com/kotlin?hl=es-419)
 
 
-### Pruebas de funcionamiento
-En este caso se realizó las pruebas con librería *expresso*
+- Posts: [https://jsonplaceholder.typicode.com/posts](https://jsonplaceholder.typicode.com/posts)
+- Usuarios: [https://jsonplaceholder.typicode.com/users](https://jsonplaceholder.typicode.com/users)
 
-### Funcionamiento
-Se valida si la información existe localmente, de lo contrario consulta la API y registra dichos datos.
-Este proceso es igual para los posts, los cuales son consultados por id de usuario seleccionado
+
+Saludos
+[Bactips](https://www.youtube.com/channel/UCJOieMcrE7WsZUPs4ffLxtg)
